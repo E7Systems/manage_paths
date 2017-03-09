@@ -13,10 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/path','PathController@index');
-
-Route::get('/store_path','PathController@store');
-
-Route::get('/paths/{id}','PathController@show');
+Route::post('/paths','PathController@store');
 
 Route::get('/paths','PathController@index');
+
+Route::get('/paths/{id}','PathController@show');

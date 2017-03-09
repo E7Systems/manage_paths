@@ -14,70 +14,54 @@ class PathController extends Controller
 	    $this->path = new $path;
 	    
     }
-    
-    protected $paths = [
-	    0 => [
-		    'latitude' => '36.974117',
-		    'longitude' => '-122.030796',
-		    'altitude' => '22.787',
-		    'photo_url' => '/images/paths/03-7-2017_16:43:27_santacruz.jpg',
-		    'points' => [
-			    0 => [
-				    'latitude' => '36.974117',
-				    'longitude' => '-122.030796',
-				    'altitude' => '22.787'
-			    ],
-			    1 => [
-				    'latitude' => '37.974117',
-				    'longitude' => '-123.030796',
-				    'altitude' => '21.787'
-			    ],
-			    2 => [
-				    'latitude' => '40.974117',
-				    'longitude' => '-119.030796',
-				    'altitude' => '20.787'
-			    ],
-			    2 => [
-				    'latitude' => '38.974117',
-				    'longitude' => '-123.030796',
-				    'altitude' => '18.787'
-			    ],
-		    ]
-	    ]
-    ];
-    
-    
-    /**
-    * Adds path to DB
-    *
-    * @return json
-    */
-     
-    public function store (Request $request) {
-	    
-	    #!!! Must hand image upload !!!#
-	    
-	    foreach ($this->paths as $path) {
-		    
-		    $new_path = $this->path->fill($path);
-		    
-		    $new_path->save();
-		    
-		    foreach ($path['points'] as $point) {
 
-			    $new_point = new Point($point);
-			    
-			    $new_point->path_id = $new_path->id; // Should refactor and have saved as relationship
-			    
-			    $new_point->save();
 
-		    }
-		    
-	    }
-	    
-	    return $path;
-    }
-    
+	/**
+	* Adds path to DB
+	*
+	* @return json
+	*/
+	
+	public function store (Request $request) {
+
+		#!!! Must hand image upload !!!#
+		
+		$status  []
+		
+		$paths = $request->get('paths');
+		
+		if (empty($paths)) {
+			
+			$status = ['status' => 'failure', 'message' => 'no paths to add.'];
+
+			return response()->json($status);
+			
+		}
+
+		foreach ($paths as $path) {
+
+			$new_path = new Path($path);
+
+			$new_path->save();
+
+			foreach ($path['points'] as $point) {
+
+				$new_point = new Point($point);
+
+				$new_point->path_id = $new_path->id; // Should refactor and have saved as relationship
+
+				$new_point->save();
+
+			}
+
+		}
+		
+		$status = ['status' => 'success', 'message' => 'paths have been added to database.'];
+
+		return response()->json($status);
+		
+	}
+
 	
 	/**
 	* Display specified path with point properties
