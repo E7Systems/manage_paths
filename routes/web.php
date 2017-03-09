@@ -16,7 +16,7 @@ use GuzzleHttp\Client;
 
 Route::get('/', function () {
 	
-	return "WebLyfe.HardCode.";
+	return view()->make('welcome');
 	
 });
 
@@ -55,7 +55,7 @@ Route::get('/add_path', function () {
 			'latitude' => '32.974117',
 			'longitude' => '-112.030796',
 			'altitude' => '25.787',
-			'photo_url' => '/images/paths/03-9-2017_11:23:27_creature.jpg',
+			'photo_url' => '/images/paths/03-9-2017_11:23:27_davenport.jpg',
 			'points' => [
 				0 => [
 					'latitude' => '32.974117',

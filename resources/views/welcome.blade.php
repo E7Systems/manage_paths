@@ -62,33 +62,37 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            
+            #contact {
+	            
+	            margin-top: 50px;
+	            
+            }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @if (Auth::check())
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ url('/login') }}">Login</a>
-                        <a href="{{ url('/register') }}">Register</a>
-                    @endif
-                </div>
-            @endif
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Path Manager
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div id="instructions">
+                	
+                	<h3>Description</h3>
+                	
+                	<p>Path Manager provides a clean API for submitting and viewing geo-location paths.</p>
+                	
+                	<h3>Endpoints</h3>
+                	
+                	<p><b>/paths</b> - <i>(Method: POST)</i> : A formatted json string or array can be sent to this uri and ill be stored in the database.</p>
+                	<p><b>/paths</b> - <i>(Method: GET)</i> : A formatted json string will be returned containing all stored paths.</p>
+                	<p><b>/paths/{id}</b> - <i>(Method: GET)</i> : A formatted json string will be returned a path with the specified id.</p>
+                
                 </div>
+                
+                <p id="contact">Having trouble? <br /> Contact <a href="mailto:jesse@tinylittleumbrella.com">jesse@tinylittleumbrella.com</a></p>
             </div>
         </div>
     </body>
