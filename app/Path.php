@@ -12,4 +12,9 @@ class Path extends Model
     {
 	    return $this->hasMany('App\Point');
     }
+    
+    public function image()
+    {
+	    return $this->hasOne('App\Image');
+    }
 }
