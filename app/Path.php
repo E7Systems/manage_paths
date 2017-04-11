@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Path extends Model
 {
-    protected $fillable = ['latitude','longitude','altitude','photo_url'];
+    protected $fillable = ['latitude','longitude','altitude','image_id'];
     
     public function points()
     {
@@ -15,6 +15,6 @@ class Path extends Model
     
     public function image()
     {
-	    return $this->hasOne('App\Image');
+	    return $this->hasOne('App\Image','id','image_id');
     }
 }
