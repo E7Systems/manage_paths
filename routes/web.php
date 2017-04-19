@@ -28,7 +28,10 @@ Route::get('/add_path', function () {
 			'latitude' => '36.974117',
 			'longitude' => '-122.030796',
 			'altitude' => '22.787',
-			'image' => base64_encode(file_get_contents('../storage/app/public/images/stock/litline.jpg')),
+			'image' => [
+				'name' => 'path1.jpg',
+				'file' => base64_encode(file_get_contents('../storage/app/public/images/stock/litline.jpg'))
+			],
 			'points' => [
 				0 => [
 					'latitude' => '36.974117',
@@ -56,7 +59,10 @@ Route::get('/add_path', function () {
 			'latitude' => '32.974117',
 			'longitude' => '-112.030796',
 			'altitude' => '25.787',
-			'image' => base64_encode(file_get_contents('../storage/app/public/images/stock/litline2.jpg')),
+			'image' => [
+				'name' => 'path2.jpg',
+				'file' => base64_encode(file_get_contents('../storage/app/public/images/stock/litline2.jpg'))
+			],
 			'points' => [
 				0 => [
 					'latitude' => '32.974117',

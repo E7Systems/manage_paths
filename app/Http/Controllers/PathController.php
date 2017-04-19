@@ -39,9 +39,9 @@ class PathController extends Controller
 
 		foreach ($paths as $path) {
 			
-			$image_file = base64_decode($path['image']);
+			$image_file = base64_decode($path['image']['file']);
 			
-			$image_name = time().'.jpg'; // Need to find a way to get extension form base64 string.
+			$image_name = time().$path['image']['name']; // Need to find a way to get extension form base64 string.
 			
 			$upload_path = config('app.lit_line_path');
 			
