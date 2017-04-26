@@ -22,12 +22,16 @@ Route::get('/', function () {
 
 Route::get('/add_path', function () {
 	
+	
 	$paths = [
 		0 => [
 			'latitude' => '36.974117',
 			'longitude' => '-122.030796',
 			'altitude' => '22.787',
-			'photo_url' => '/images/paths/03-7-2017_16:43:27_santacruz.jpg',
+			'image' => [
+				'name' => 'path1.jpg',
+				'file' => base64_encode(file_get_contents('../storage/app/public/images/stock/litline.jpg'))
+			],
 			'points' => [
 				0 => [
 					'latitude' => '36.974117',
@@ -55,7 +59,10 @@ Route::get('/add_path', function () {
 			'latitude' => '32.974117',
 			'longitude' => '-112.030796',
 			'altitude' => '25.787',
-			'photo_url' => '/images/paths/03-9-2017_11:23:27_davenport.jpg',
+			'image' => [
+				'name' => 'path2.jpg',
+				'file' => base64_encode(file_get_contents('../storage/app/public/images/stock/litline2.jpg'))
+			],
 			'points' => [
 				0 => [
 					'latitude' => '32.974117',
@@ -85,7 +92,6 @@ Route::get('/add_path', function () {
 	
 	$http_client = new Client;
 	
-
 	$http_request = $http_client->post($url,[
 		
 		'json' => [
@@ -96,7 +102,6 @@ Route::get('/add_path', function () {
 		
 	]);
 
-	
 	return $http_request->getBody();
 	
 });

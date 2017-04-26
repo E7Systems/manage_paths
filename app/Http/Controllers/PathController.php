@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Path;
+use App\Image;
 use App\Point;
 use Illuminate\Http\Request;
 
@@ -23,10 +24,8 @@ class PathController extends Controller
 	*/
 	
 	public function store (Request $request) {
-
-		#!!! Must hand image upload !!!#
 		
-		$status  []
+		$status = [];
 		
 		$paths = $request->get('paths');
 		
@@ -39,8 +38,26 @@ class PathController extends Controller
 		}
 
 		foreach ($paths as $path) {
+			
+			$image_file = base64_decode($path['image']['file']);
+			
+			$image_name = time().$path['image']['name']; // Need to find a way to get extension form base64 string.
+			
+			$upload_path = config('app.lit_line_path');
+			
+			if (!file_put_contents($upload_path.$image_name, $image_file)) {
+
+				$status = ['status' => 'failure', 'message' => 'path image is unable to be'];
+
+				return response()->json($status);
+
+			}
+
+			$image = (new Image())->create(['file_name' => $image_name]);
 
 			$new_path = new Path($path);
+			
+			$new_path->image_id = $image->id;
 
 			$new_path->save();
 
@@ -48,7 +65,7 @@ class PathController extends Controller
 
 				$new_point = new Point($point);
 
-				$new_point->path_id = $new_path->id; // Should refactor and have saved as relationship
+				$new_point->path_id = $new_path->id;
 
 				$new_point->save();
 
