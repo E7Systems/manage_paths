@@ -12,13 +12,13 @@ class AddPathColumns extends Migration
      * @return void
      */
     public function up()
-    {
+    {	
         Schema::table('paths', function (Blueprint $table) {
             $table->integer('dop')->after('altitude');
             $table->float('image_direction')->after('dop');
             $table->string('latitude_ref')->after('latitude');
             $table->string('longitude_ref')->after('longitude');
-            $table->dateTime('point_captured_at')->after('image_id');
+            $table->dateTime('photo_taken_at')->after('image_id');
             $table->float('roll')->after('dop');
             $table->float('pitch')->after('roll');
             $table->float('yaw')->after('pitch');
@@ -39,7 +39,7 @@ class AddPathColumns extends Migration
 	        $table->dropColumn('image_direction');
 	        $table->dropColumn('latitude_ref');
 	        $table->dropColumn('longitude_ref');
-	        $table->dropColumn('point_captured_at');
+	        $table->dropColumn('photo_taken_at');
 	        $table->dropColumn('roll');
 	        $table->dropColumn('pitch');
 	        $table->dropColumn('yaw');
