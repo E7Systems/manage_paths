@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Path extends Model
 {
-    protected $fillable = ['latitude','longitude','altitude','image_id'];
+    protected $fillable = ['latitude','latitude_ref','longitude','longitude_ref','altitude','dop','roll','pitch','yaw','rotation_matrix','quaternion','image_direction','image_id','photo_taken_at'];
     
     public function points()
     {
