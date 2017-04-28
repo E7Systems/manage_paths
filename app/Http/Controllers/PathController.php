@@ -54,7 +54,7 @@ class PathController extends Controller
 			}
 
 			$image = (new Image())->create(['file_name' => $image_name]);
-
+			
 			$new_path = new Path($path);
 			
 			$new_path->image_id = $image->id;
