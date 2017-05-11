@@ -43,6 +43,7 @@ class PathController extends Controller
 		
 		foreach ($paths as $path) {
 			
+/*
 			$image_file = base64_decode($path['image']['file']);
 			
 			$image_name = time().$path['image']['name']; // Need to find a way to get extension form base64 string.
@@ -58,10 +59,13 @@ class PathController extends Controller
 			}
 
 			$image = (new Image())->create(['file_name' => $image_name]);
+*/
 			
 			$new_path = new Path($path);
 			
-			$new_path->image_id = $image->id;
+			#$new_path->image_id = $image->id;
+			
+			$new_path->image_id = 24;
 
 			$new_path->save();
 
