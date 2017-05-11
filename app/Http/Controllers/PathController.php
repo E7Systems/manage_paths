@@ -27,27 +27,31 @@ class PathController extends Controller
 		
 		$status = [];
 		
-		$paths = $request->get('paths');
+		$post_data = $request->instance();
+		
+		$json = $post_data->getContent();
+		
+		$paths = json_decode($json,true);
 		
 		if (empty($paths)) {
 			
-			$status = ['status' => 'failure', 'message' => 'no paths to add.'];
+			$status = ['status' => 'failure', 'message' => 'no paths received.'];
 
 			return response()->json($status);
 			
 		}
-
+		
 		foreach ($paths as $path) {
 			
 			$image_file = base64_decode($path['image']['file']);
 			
 			$image_name = time().$path['image']['name']; // Need to find a way to get extension form base64 string.
-			
+
 			$upload_path = config('app.lit_line_path');
 			
 			if (!file_put_contents($upload_path.$image_name, $image_file)) {
 
-				$status = ['status' => 'failure', 'message' => 'path image is unable to be'];
+				$status = ['status' => 'failure', 'message' => 'path image is unable to be moved'];
 
 				return response()->json($status);
 
@@ -70,6 +74,7 @@ class PathController extends Controller
 				$new_point->save();
 
 			}
+
 
 		}
 		

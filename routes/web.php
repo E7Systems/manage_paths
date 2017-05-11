@@ -23,6 +23,7 @@ Route::get('/', function () {
 Route::get('/add_path', function () {
 	
 	
+	
 	$paths = [
 		0 => [
 			'latitude' => '36.974117',
@@ -71,6 +72,8 @@ Route::get('/add_path', function () {
 		]
 	];
 	
+	#dd(base64_encode(file_get_contents('../storage/app/public/images/stock/litline.jpg')));
+	
 	$url = "http://pathmanager.dev/api/paths";
 	
 	$http_client = new Client;
@@ -79,7 +82,9 @@ Route::get('/add_path', function () {
 		
 		'json' => [
 			
-			'paths' => $paths
+			//'paths' => $paths
+			
+			'fart' => 'doctor'
 			
 		]
 		
