@@ -86,7 +86,11 @@ class PathController extends Controller
 
 		}
 		
-		$status = ['status' => 'success', 'message' => 'paths have been added to database.'];
+		$status = [
+			'status' => 'success',
+			'message' => 'paths have been added to database.',
+			'content' => $post_data->getContent()
+		];
 
 		return response()->json($status);
 		
