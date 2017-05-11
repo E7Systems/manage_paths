@@ -35,7 +35,11 @@ class PathController extends Controller
 		
 		if (empty($paths)) {
 			
-			$status = ['status' => 'failure', 'message' => 'no paths received.'];
+			$status = [
+				'status' => 'failure',
+				'message' => 'no paths received.',
+				'content' => $post_data->getContent()
+			];
 
 			return response()->json($status);
 			
