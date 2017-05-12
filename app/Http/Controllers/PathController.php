@@ -16,7 +16,6 @@ class PathController extends Controller
 	    
     }
 
-
 	/**
 	* Adds path to DB
 	*
@@ -27,25 +26,29 @@ class PathController extends Controller
 		
 		$status = [];
 		
-		$post_data = $request->instance();
-		
-		$json = $post_data->getContent();
-		
-		$paths = json_decode($json,true);
-		
-		if (empty($paths)) {
+		if ($request->header('content-type') !== "application/json") {
 			
-			$status = [
-				'status' => 'failure',
-				'message' => 'no paths received.',
-				'content' => $post_data->getContent()
-			];
-
-			return response()->json($status);
+			return $this->apiResponse('error','Header type must be "application/json". Header Supplied is ' . $request->header('content-type'),$request->header());
 			
 		}
 		
-		foreach ($paths as $path) {
+		if ($request->isJson()) {
+			
+			$post_data = $this->parseForPostman(json_decode($request->getContent(),true));
+			
+		} else {
+			
+			return $this->apiResponse('error','Unable to find JSON string.',$request->all()); // WTF
+			
+		}
+		
+		if (empty($post_data)) {
+			
+			return $this->apiResponse('failure','No paths found in JSON object',$post_data);
+			
+		}
+		
+		foreach ($post_data as $path) {
 			
 /*
 			$image_file = base64_decode($path['image']['file']);
@@ -65,17 +68,28 @@ class PathController extends Controller
 			$image = (new Image())->create(['file_name' => $image_name]);
 */
 			
-			$new_path = new Path($path);
 			
+			$new_path = new Path;
+
 			#$new_path->image_id = $image->id;
 			
+			$new_path->fill($path);
+
 			$new_path->image_id = 24;
 
 			$new_path->save();
+			
+
+
+
+			#return $path['points'][2];
 
 			foreach ($path['points'] as $point) {
 
-				$new_point = new Point($point);
+
+				$new_point = new Point;
+				
+				$new_point->fill($point);
 
 				$new_point->path_id = $new_path->id;
 
@@ -83,16 +97,9 @@ class PathController extends Controller
 
 			}
 
-
 		}
 		
-		$status = [
-			'status' => 'success',
-			'message' => 'paths have been added to database.',
-			'content' => $post_data->getContent()
-		];
-
-		return response()->json($status);
+		return $this->apiResponse('success','paths have been added to database.',$post_data);
 		
 	}
 
@@ -125,6 +132,50 @@ class PathController extends Controller
 	    $paths = $this->path->with('points')->get();
 	    
 	    return response()->json($paths);
+	    
+    }
+    
+    
+    /**
+     * Return JSON object with API details.
+     *
+     * @return json
+     */
+     
+    private function apiResponse($status,$message,$content)
+    {
+		$error = [
+			'status' => $status,
+			'message' => $message,
+			'content' => $content
+		];
+		
+		return response()->json($error);
+    }
+    
+    /**
+     * Pull and returns the proper JSON string out of the array.
+     *
+     * Postman & Guzzle/HTTP to not deliver JSON POSTs with the same format.
+     *
+     * @return json
+     */
+    private function parseForPostman($data)
+    {
+	    
+	    if ((count($data) > 1) || (gettype($data[0]) == "array")) {
+		    	
+		    // Postman returning unwrapped set of paths
+		    
+		    return $data;
+		    
+	    } else {
+		    
+		    // Guzzle/HTTP returnign data wrapped in array
+		    
+		    return json_decode($data[0],true);
+		    
+	    }
 	    
     }
     

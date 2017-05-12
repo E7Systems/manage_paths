@@ -17,4 +17,10 @@ class Path extends Model
     {
 	    return $this->hasOne('App\Image','id','image_id');
     }
+    
+    public function sayHi()
+    {
+	    return "hi";
+    }
+    
 }
