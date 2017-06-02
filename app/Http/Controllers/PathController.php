@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Path;
 use App\Image;
 use App\Point;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 class PathController extends Controller
@@ -24,6 +25,7 @@ class PathController extends Controller
 	
 	public function store (Request $request) {
 		
+		Log::info('REWUEST OBJECT: '.$request->getContent());
 		$status = [];
 		
 		if ($request->header('content-type') !== "application/json") {
@@ -49,33 +51,34 @@ class PathController extends Controller
 		}
 		
 		foreach ($post_data as $path) {
-			
-/*
-			$image_file = base64_decode($path['image']['file']);
-			
-			$image_name = time().$path['image']['name']; // Need to find a way to get extension form base64 string.
+			if (isset($path['image'])){	
+				$image_file = base64_decode($path['image']['file']);
+				
+				$image_name = time().$path['image']['name']; // Need to find a way to get extension form base64 string.
 
-			$upload_path = config('app.lit_line_path');
-			
-			if (!file_put_contents($upload_path.$image_name, $image_file)) {
+				$upload_path = config('app.lit_line_path');
+				
+				if (!file_put_contents($upload_path.$image_name, $image_file)) {
 
-				$status = ['status' => 'failure', 'message' => 'path image is unable to be moved'];
+					$status = ['status' => 'failure', 'message' => 'path image is unable to be moved'];
 
-				return response()->json($status);
+					return response()->json($status);
 
-			}
+				}
 
-			$image = (new Image())->create(['file_name' => $image_name]);
-*/
-			
+				$image = (new Image())->create(['file_name' => $image_name]);
+				$image_id = $image->id;
+		        } else {
+				$image_id = 24;
+			}	
 			
 			$new_path = new Path;
 
-			#$new_path->image_id = $image->id;
+			$new_path->image_id = $image_id;
 			
 			$new_path->fill($path);
 
-			$new_path->image_id = 24;
+			//$new_path->image_id = 24;
 
 			$new_path->save();
 			
@@ -162,8 +165,9 @@ class PathController extends Controller
      */
     private function parseForPostman($data)
     {
-	    
-	    if ((count($data) > 1) || (gettype($data[0]) == "array")) {
+	    if (isset($data["paths"]) && $data["paths"]) {
+		return $data["paths"];
+	    }elseif ((count($data) > 1) || (gettype($data[0]) == "array")) {
 		    	
 		    // Postman returning unwrapped set of paths
 		    
